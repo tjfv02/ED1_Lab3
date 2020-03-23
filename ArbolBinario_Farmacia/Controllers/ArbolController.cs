@@ -329,7 +329,7 @@ namespace ArbolBinario_Farmacia.Controllers
 
             
         }
-
+        //                                      Funciones AVL
         //---------------------------------------------------------------------------------------------------
         //Función para obtener que rama es mayor
         int max(int lhs, int rhs)
@@ -382,6 +382,6 @@ namespace ArbolBinario_Farmacia.Controllers
             k1.Derecho = RotacionIzquierdaSimple(k1.Derecho);
             return RotacionDerechaSimple(k1);
         }
-        
+
     }
 }
