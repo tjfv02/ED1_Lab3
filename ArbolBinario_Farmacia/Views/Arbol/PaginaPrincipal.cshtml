@@ -1,0 +1,36 @@
+﻿@{
+    ViewBag.Title = "PaginaPrincipal";
+}
+
+<h2>PaginaPrincipal</h2>@{
+    ViewBag.Title = "Tu Salud en mis Manos";
+}
+
+<div class="jumbotron">
+    <h1 class="display-4">Bienvenido!</h1>
+    <p class="lead">Bienvenido a Tu Salud en mis Manos!, esperamos servirte.</p>
+    <hr class="my-4">
+    <p>Primero Carga el inventario par poder realizar pedidos.</p>
+    @*--------------------------------------- Botones ---------------------------------------*@
+    <button type="button" class="btn btn-primary btn-lg btn-block">Cargar Datos</button>
+
+ 
+    <div></div>
+
+    <h3>
+        @Html.ActionLink("Cargar Datos", "CargaArch", "Arbol")
+    </h3>
+    <h3>
+        @Html.ActionLink("Nuevo Pedido", "NuevoPedido", "Arbol")
+    </h3>
+    @*<h3>
+            @Html.ActionLink("Pedidos del dia de hoy", "VentasHoy", "Pedido")
+        </h3>
+        <h3>
+            @Html.ActionLink("Exportar Datos", "Exportacion", "Home")
+        </h3>
+        <h3>
+            @Html.ActionLink("Reabastecimiento", "Recarga", "Home")
+        </h3>*@
+</div>
+
