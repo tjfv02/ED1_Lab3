@@ -389,10 +389,50 @@ namespace ArbolBinario_Farmacia.Controllers
                 NodoELiminado = null;
             }
 
+        }//                                      Recorridos
+        //---------------------------------------------------------------------------------------------------
+        public string Texto_impresion = "";
+        void PreOrden(Nodo nodo)
+        {
+            //Raiz
+            if (nodo.Izquierdo!=null)
+            {
+                PreOrden(nodo.Izquierdo);
+            }
+            if (nodo.Derecho!=null)
+            {
+                PreOrden(nodo.Derecho);
+            }
+        }
+        void InOrden(Nodo nodo)
+        {
+            if (nodo.Izquierdo!=null)
+            {
+                InOrden(nodo.Izquierdo);
+            }
+            //Raiz
+            if (nodo.Derecho!=null)
+            {
+                InOrden(nodo.Derecho);
+            }
+        }
+        void PostOrden(Nodo nodo)
+        {
+            if (nodo.Izquierdo != null)
+            {
+                InOrden(nodo.Izquierdo);
+            }
+            if (nodo.Derecho != null)
+            {
+                InOrden(nodo.Derecho);
+            }
+            //Raiz
         }
         //                                      Funciones AVL
         //---------------------------------------------------------------------------------------------------
+
         //Función para obtener que rama es mayor
+        //    izquierdo  derecho
         int max(int lhs, int rhs)
         {
             return lhs > rhs ? lhs : rhs;
@@ -411,6 +451,8 @@ namespace ArbolBinario_Farmacia.Controllers
                 return 1 + Math.Max(getAltura(nodoActual.Izquierdo), getAltura(nodoActual.Derecho));
         }
 
+        //                                       Rotaciones
+        //---------------------------------------------------------------------------------------------------
         //Rotacion Izquierda Simple
         Nodo RotacionIzquierdaSimple(Nodo k2)
         {
