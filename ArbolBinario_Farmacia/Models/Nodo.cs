@@ -14,6 +14,7 @@ namespace ArbolBinario_Farmacia.Models
         public string Casa_productora {get; set;}
         public double Precio{get; set;}
         public int Existencia{get; set;}
+
         //hijos
         public Nodo Padre;
         public Nodo Izquierdo;

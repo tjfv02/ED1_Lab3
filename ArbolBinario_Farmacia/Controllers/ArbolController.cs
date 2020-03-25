@@ -12,7 +12,7 @@ namespace ArbolBinario_Farmacia.Controllers
     public class ArbolController : Controller
     {
         //LIsta de pedidos 
-        public static List<Pedido> Pedidos = new List<Pedido>();
+        public static List<Pedido> Pedidos = new List<Pedido>(); // Todos los pedidos 
 
         public static Nodo Raiz;
         public static Nodo nodo;
@@ -91,6 +91,7 @@ namespace ArbolBinario_Farmacia.Controllers
             nodo = BuscarNodo(Convert.ToInt32(collection["Linea"]), Raiz);
             return RedirectToAction("AgregarDetalle");
         }
+        // Datos del cliente 
 
         // GET
         public ActionResult NuevoPedido()
@@ -273,7 +274,7 @@ namespace ArbolBinario_Farmacia.Controllers
             }
         }
 
-        //Metodos
+        //----------------------------------Metodos------------------------------------------------
         Nodo NuevoHijo(int linea,ref  Nodo hoja,ref Nodo padre, int altura=0)
         {
 
@@ -322,12 +323,72 @@ namespace ArbolBinario_Farmacia.Controllers
             }
         }
        
-        void ELiminar(int linea, Nodo nodo)
+        void ELiminar(int linea,  Nodo nodo)
         {
             Nodo NodoELiminado;
-            NodoELiminado=BuscarNodo(linea, nodo);
+            Nodo aux;
+            NodoELiminado = BuscarNodo(linea, nodo); // Encontrado
 
-            
+            //Eliminar nodo sin hijos
+            if (NodoELiminado.Izquierdo == null && NodoELiminado.Derecho == null)
+            {
+                NodoELiminado = null;
+            }
+            //else
+            //{
+            //    if (NodoELiminado.Izquierdo == null && NodoELiminado.Derecho != null)
+            //    {
+            //        NodoELiminado = NodoELiminado.Derecho;
+            //        NodoELiminado.Derecho = null;
+            //    }
+            //    else
+            //    {
+            //        if (NodoELiminado.Izquierdo != null && NodoELiminado.Derecho == null)
+            //        {
+            //            NodoELiminado = NodoELiminado.Izquierdo;
+            //            NodoELiminado.Izquierdo = null;
+            //        }
+            //        else
+            //        {
+            //            aux = NodoELiminado.Izquierdo;
+            //            while (aux.Derecho!=null)
+            //            {
+            //                aux=aux.Derecho;
+            //            }
+            //            NodoELiminado.Linea = aux.Linea;
+            //            ELiminar(aux.Linea, aux);
+            //        }
+            //    }
+            //}
+
+            //Eliminar nodo con un sub-árbol hijo
+            else if (NodoELiminado.Izquierdo == null|| NodoELiminado.Derecho == null)
+            {
+                if (NodoELiminado.Izquierdo==null)
+                {
+                    aux = NodoELiminado.Padre;
+                    aux.Derecho = NodoELiminado.Derecho;
+                    NodoELiminado.Padre.Derecho = aux.Derecho;
+                    NodoELiminado = null;
+                }
+                else
+                {
+                    aux = NodoELiminado.Padre;
+                    aux.Derecho = NodoELiminado.Izquierdo;
+                    NodoELiminado.Padre.Derecho = aux.Derecho;
+                    NodoELiminado = null;
+
+                }
+            }
+            //Eliminar nodo con 2 su-árboles 
+            else
+            {
+                aux = NodoELiminado.Derecho;
+                aux.Izquierdo = NodoELiminado.Izquierdo;
+                NodoELiminado.Padre.Derecho = aux;
+                NodoELiminado = null;
+            }
+
         }
         //                                      Funciones AVL
         //---------------------------------------------------------------------------------------------------
