@@ -275,7 +275,7 @@ namespace ArbolBinario_Farmacia.Controllers
         }
 
         //----------------------------------Metodos------------------------------------------------
-        Nodo NuevoHijo(int linea,ref  Nodo hoja,ref Nodo padre, int altura=0)
+        Nodo NuevoHijo(int linea,ref  Nodo hoja,ref Nodo padre, int Altura=0)
         {
 
             if (hoja==null)
@@ -283,7 +283,7 @@ namespace ArbolBinario_Farmacia.Controllers
                 hoja = new Nodo();
                 hoja.Linea = linea;
                 hoja.Padre = padre;
-                hoja.Altura = altura;
+                hoja.Altura = Altura;
                 return hoja;
             }
             // si es igual
@@ -294,11 +294,11 @@ namespace ArbolBinario_Farmacia.Controllers
             //Si es mayor
             else if (linea>hoja.Linea)
             {
-               return NuevoHijo(linea,ref  hoja.Derecho,ref hoja,altura+1);
+               return NuevoHijo(linea,ref  hoja.Derecho,ref hoja,Altura+1);
             }
             else
             {
-                return NuevoHijo(linea, ref hoja.Izquierdo, ref hoja,altura+1);
+                return NuevoHijo(linea, ref hoja.Izquierdo, ref hoja,Altura+1);
             }
 
         }
@@ -411,8 +411,84 @@ namespace ArbolBinario_Farmacia.Controllers
                 return 1 + Math.Max(getAltura(nodoActual.Izquierdo), getAltura(nodoActual.Derecho));
         }
 
-        //Rotacion Izquierda Simple
-        Nodo RotacionIzquierdaSimple(Nodo k2)
+        //Balanceo de arbol AVL
+        public Nodo LlamarBalanceo(Nodo inicio)
+        {
+
+
+            if (inicio.Izquierdo != null)
+            {
+                inicio.Izquierdo = LlamarBalanceo(inicio.Izquierdo);
+            }
+
+            if (inicio.Derecho != null)
+            {
+                inicio.Derecho = LlamarBalanceo(inicio.Derecho);
+            }
+            int a = NecesitoBalanceo(inicio);
+            if (a >= -1 && a <= 1)
+            {
+                //Nodo balanceado
+            }
+            else
+            {
+                if (a > 1)
+                {
+                    int b = NecesitoBalanceo(inicio.Izquierdo);
+                    if (b < 0)
+                    {
+
+                        inicio = RotacionDerechoDoble(inicio);
+                    }
+                    else
+                    {
+                        inicio = RotacionDerechoSimple(inicio);
+                    }
+
+                }
+                else
+                {
+                    int c = NecesitoBalanceo(inicio.Derecho);
+                    if (c > 0)
+                    {
+                        inicio = RotacionIzquierdoDoble(inicio);
+                    }
+                    else
+                    {
+                        inicio = RotacionIzquierdoSimple(inicio);
+                    }
+                }
+
+            }
+
+            return inicio;
+        }
+        public int NecesitoBalanceo(Nodo padre)
+        {
+            Raiz.calcularAltura();
+            int a = 0;
+            if (padre.Izquierdo == null && padre.Derecho == null)
+            {
+                a = 0;
+            }
+            else if (padre.Izquierdo == null && padre.Derecho != null)
+            {
+                a = 0 - padre.Derecho.Altura;
+            }
+            else if (padre.Izquierdo != null && padre.Derecho == null)
+            {
+                a = padre.Izquierdo.Altura;
+            }
+            else if (padre.Izquierdo != null && padre.Derecho != null)
+            {
+                a = padre.Izquierdo.Altura - padre.Derecho.Altura;
+            }
+
+            return a;
+        }
+
+        //Rotacion Izquierdo Simple
+        Nodo RotacionIzquierdoSimple(Nodo k2)
         {
             Nodo k1 = k2.Izquierdo;
             k2.Izquierdo = k1.Derecho;
@@ -421,8 +497,8 @@ namespace ArbolBinario_Farmacia.Controllers
             k1.Altura = max(Alturas(k1.Izquierdo), k2.Altura) + 1;
             return k1;
         }
-        //Rotacion Derecha Simple
-        Nodo RotacionDerechaSimple(Nodo k1)
+        //Rotacion Derecho Simple
+        Nodo RotacionDerechoSimple(Nodo k1)
         {
             Nodo k2 = k1.Derecho;
             k1.Derecho = k2.Izquierdo;
@@ -431,17 +507,17 @@ namespace ArbolBinario_Farmacia.Controllers
             k2.Altura = max(Alturas(k2.Derecho), k1.Altura) + 1;
             return k2;
         }
-        //Doble Rotacion Izquierda
-        Nodo RotacionIzquierdaDoble(Nodo k3)
+        //Doble Rotacion Izquierdo
+        Nodo RotacionIzquierdoDoble(Nodo k3)
         {
-            k3.Izquierdo = RotacionDerechaSimple(k3.Izquierdo);
-            return RotacionIzquierdaSimple(k3);
+            k3.Izquierdo = RotacionDerechoSimple(k3.Izquierdo);
+            return RotacionIzquierdoSimple(k3);
         }
-        //Doble Rotacion Derecha
-        Nodo RotacionDerechaDoble(Nodo k1)
+        //Doble Rotacion Derecho
+        Nodo RotacionDerechoDoble(Nodo k1)
         {
-            k1.Derecho = RotacionIzquierdaSimple(k1.Derecho);
-            return RotacionDerechaSimple(k1);
+            k1.Derecho = RotacionIzquierdoSimple(k1.Derecho);
+            return RotacionDerechoSimple(k1);
         }
 
     }
