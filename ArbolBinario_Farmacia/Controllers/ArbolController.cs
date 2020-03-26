@@ -32,8 +32,33 @@ namespace ArbolBinario_Farmacia.Controllers
 
         public ActionResult dummy()
         {
+            Pedido auxPedido;
+            
+
+            auxPedido = Pedidos[Pedidos.Count - 1];
+            foreach (Detalle auxDetalle in auxPedido.detalle)
+            {
+                Nodo auxFarmaco;
+                auxFarmaco = BuscarNodo(auxDetalle.Linea, Raiz);
+                auxFarmaco.Existencia -= auxDetalle.Cantidad;
+               
+
+                ////REABASTECER 
+                //Random rnd = new Random();
+                //int Reabastecer = rnd.Next(1, 15);
+                
+                //auxFarmaco.Existencia = Reabastecer;
+
+            }
             // return View(Pedidos[Pedidos.Count - 1].detalle);
+
             return View(Pedidos[Pedidos.Count-1]);
+        }
+
+        //GET
+        public ActionResult OverStock()
+        {
+            return View();
         }
 
         //GET
@@ -71,16 +96,29 @@ namespace ArbolBinario_Farmacia.Controllers
                 Precio = nodo.Precio
             
             };
+            Nodo auxBusqueda;
+            auxBusqueda = BuscarNodo(NuevoDetalle.Linea, Raiz);
+            if (NuevoDetalle.Cantidad>auxBusqueda.Existencia)
+            {
+                return RedirectToAction("OverStock");
+                //No hay suficientes
+            }
+            else
+            {
 
-            NuevoDetalle.Total_a_Cancelar = NuevoDetalle.Cantidad * NuevoDetalle.Precio;
-            Pedidos[Pedidos.Count - 1].detalle.Add(NuevoDetalle);
-
-            //Suma los totales 
-
-            Pedidos[Pedidos.Count-1].Total += NuevoDetalle.Total_a_Cancelar;
+                NuevoDetalle.Total_a_Cancelar = NuevoDetalle.Cantidad * NuevoDetalle.Precio;
+                Pedidos[Pedidos.Count - 1].detalle.Add(NuevoDetalle);
+                //Suma los totales
+                Pedidos[Pedidos.Count - 1].Total += NuevoDetalle.Total_a_Cancelar;
 
 
-            return RedirectToAction("NuevoDetalle");
+                return RedirectToAction("NuevoDetalle");
+            }
+           
+
+             
+
+           
         }
 
         //Post
@@ -174,7 +212,7 @@ namespace ArbolBinario_Farmacia.Controllers
             
 
 
-            return RedirectToAction("NuevoPedido") ;
+            return RedirectToAction("PaginaPrincipal") ;
         }
 
 
@@ -323,72 +361,32 @@ namespace ArbolBinario_Farmacia.Controllers
             }
         }
        
-        void ELiminar(int linea,  Nodo nodo)
+        void ELiminar(int linea)
         {
             Nodo NodoELiminado;
-            Nodo aux;
-            NodoELiminado = BuscarNodo(linea, nodo); // Encontrado
+            Nodo auxDerecho;
+            Nodo auxIzquierdo;
+            NodoELiminado = BuscarNodo(linea, Raiz); // Encontrado
 
-            //Eliminar nodo sin hijos
-            if (NodoELiminado.Izquierdo == null && NodoELiminado.Derecho == null)
+            auxDerecho = NodoELiminado.Derecho;
+            auxIzquierdo = NodoELiminado.Izquierdo;
+            if (auxDerecho==null)
             {
-                NodoELiminado = null;
+                auxDerecho = auxIzquierdo;
+                auxIzquierdo = null;
             }
-            //else
-            //{
-            //    if (NodoELiminado.Izquierdo == null && NodoELiminado.Derecho != null)
-            //    {
-            //        NodoELiminado = NodoELiminado.Derecho;
-            //        NodoELiminado.Derecho = null;
-            //    }
-            //    else
-            //    {
-            //        if (NodoELiminado.Izquierdo != null && NodoELiminado.Derecho == null)
-            //        {
-            //            NodoELiminado = NodoELiminado.Izquierdo;
-            //            NodoELiminado.Izquierdo = null;
-            //        }
-            //        else
-            //        {
-            //            aux = NodoELiminado.Izquierdo;
-            //            while (aux.Derecho!=null)
-            //            {
-            //                aux=aux.Derecho;
-            //            }
-            //            NodoELiminado.Linea = aux.Linea;
-            //            ELiminar(aux.Linea, aux);
-            //        }
-            //    }
-            //}
+            NodoELiminado = auxDerecho;
 
-            //Eliminar nodo con un sub-árbol hijo
-            else if (NodoELiminado.Izquierdo == null|| NodoELiminado.Derecho == null)
+            if (auxIzquierdo!=null)
             {
-                if (NodoELiminado.Izquierdo==null)
+                Nodo auxInferior;
+                auxInferior = auxDerecho;
+                while (auxInferior.Izquierdo != null)
                 {
-                    aux = NodoELiminado.Padre;
-                    aux.Derecho = NodoELiminado.Derecho;
-                    NodoELiminado.Padre.Derecho = aux.Derecho;
-                    NodoELiminado = null;
+                    auxInferior = auxInferior.Izquierdo;
                 }
-                else
-                {
-                    aux = NodoELiminado.Padre;
-                    aux.Derecho = NodoELiminado.Izquierdo;
-                    NodoELiminado.Padre.Derecho = aux.Derecho;
-                    NodoELiminado = null;
-
-                }
+                auxInferior.Izquierdo = auxIzquierdo;
             }
-            //Eliminar nodo con 2 su-árboles 
-            else
-            {
-                aux = NodoELiminado.Derecho;
-                aux.Izquierdo = NodoELiminado.Izquierdo;
-                NodoELiminado.Padre.Derecho = aux;
-                NodoELiminado = null;
-            }
-
         }
         //                                      Funciones AVL
         //---------------------------------------------------------------------------------------------------
