@@ -67,7 +67,7 @@
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.Linea }) |
                 @Html.ActionLink("Details", "Details", new { id = item.Linea }) |
-                @Html.ActionLink("Delete", "Reabastecer", new { id = item.Linea })
+                @Html.ActionLink("Delete", "Delete", new { id = item.Linea })
             </td>
 
 
@@ -75,4 +75,7 @@
     }
 
 </table>
-@Html.ActionLink("Inicio", "PaginaPrincipal")
+<h3>
+    @Html.ActionLink("Regresar", "NuevoDetalle") ||
+    @Html.ActionLink("Reabastecer", "Reabastecer")
+</h3>

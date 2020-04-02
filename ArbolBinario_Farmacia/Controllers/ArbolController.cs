@@ -88,7 +88,7 @@ namespace ArbolBinario_Farmacia.Controllers
             }
             // return View(Pedidos[Pedidos.Count - 1].detalle);
 
-            return View(Pedidos[Pedidos.Count]);
+            return View(Pedidos[Pedidos.Count-1]);
         }
         //Post
         [HttpPost]
@@ -330,10 +330,13 @@ namespace ArbolBinario_Farmacia.Controllers
         {
             try
             {
-               
+                int linea = Convert.ToInt32(collection["Linea"]);
+                ELiminar(linea);
+
                 
 
-                return RedirectToAction("Index");
+
+                return RedirectToAction("NuevoDetalle");
             }
             catch
             {

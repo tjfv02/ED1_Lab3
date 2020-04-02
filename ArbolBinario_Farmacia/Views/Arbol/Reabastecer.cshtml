@@ -1,44 +1,43 @@
-﻿@model IEnumerable<ArbolBinario_Farmacia.Models.Detalle>
+﻿@model ArbolBinario_Farmacia.Models.Pedido
 
 @{
     ViewBag.Title = "Reabastecer";
 }
 
-<h2>Reabastecer</h2>
+<h2>Productos reabastecidos</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Regresar a PaginaPrincipal", "PaginaPrincipal")
+    ||
+    |
+    ||
+    @Html.ActionLink("Regresar a Nuevo Pedido", "NuevoPedido")
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Linea)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.Nombre)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Descripcion)
+            @Html.DisplayNameFor(model => model.Nit)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Cantidad)
+            @Html.DisplayNameFor(model => model.Direccion)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Precio)
+            @Html.DisplayNameFor(model => model.Linea)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Total_a_Cancelar)
+            @Html.DisplayNameFor(model => model.Total)
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+    @foreach (var item in Model.detalle)
+    {
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.Linea)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Nombre)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Descripcion)
@@ -53,11 +52,10 @@
             @Html.DisplayFor(modelItem => item.Total_a_Cancelar)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            @Html.ActionLink("Detalles del Producto", "Details", new { id = item.Linea }) |
         </td>
+
     </tr>
-}
+    }
 
 </table>
