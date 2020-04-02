@@ -257,7 +257,7 @@ namespace ArbolBinario_Farmacia.Controllers
                         lector = archivolec.ReadLine();
 
                     }
-
+                    Raiz = LlamarBalanceo(Raiz);
                 }
             }
             
@@ -454,6 +454,7 @@ namespace ArbolBinario_Farmacia.Controllers
                 }
                 auxInferior.Izquierdo = auxIzquierdo;
             }
+            Raiz = LlamarBalanceo(Raiz); //Despues de eliminar el nodo, se debe balancear el arbol
         }
         Nodo NecesitaReabastecimiento(int linea)
         {
@@ -590,7 +591,7 @@ namespace ArbolBinario_Farmacia.Controllers
         }
         public int NecesitoBalanceo(Nodo padre)
         {
-            Raiz.calcularAltura();
+            padre.calcularAltura();
             int a = 0;
             if (padre.Izquierdo == null && padre.Derecho == null)
             {
@@ -613,7 +614,7 @@ namespace ArbolBinario_Farmacia.Controllers
         }
 
         //Rotacion Izquierdo Simple
-        Nodo RotacionIzquierdoSimple(Nodo k2)
+        Nodo RotacionDerechoSimple(Nodo k2)
         {
             Nodo k1 = k2.Izquierdo;
             k2.Izquierdo = k1.Derecho;
@@ -623,7 +624,7 @@ namespace ArbolBinario_Farmacia.Controllers
             return k1;
         }
         //Rotacion Derecho Simple
-        Nodo RotacionDerechoSimple(Nodo k1)
+        Nodo RotacionIzquierdoSimple(Nodo k1)
         {
             Nodo k2 = k1.Derecho;
             k1.Derecho = k2.Izquierdo;
@@ -633,16 +634,16 @@ namespace ArbolBinario_Farmacia.Controllers
             return k2;
         }
         //Doble Rotacion Izquierdo
-        Nodo RotacionIzquierdoDoble(Nodo k3)
+        Nodo RotacionDerechoDoble(Nodo k3)
         {
-            k3.Izquierdo = RotacionDerechoSimple(k3.Izquierdo);
-            return RotacionIzquierdoSimple(k3);
+            k3.Izquierdo = RotacionIzquierdoSimple(k3.Izquierdo);
+            return RotacionDerechoSimple(k3);
         }
         //Doble Rotacion Derecho
-        Nodo RotacionDerechoDoble(Nodo k1)
+        Nodo RotacionIzquierdoDoble(Nodo k1)
         {
-            k1.Derecho = RotacionIzquierdoSimple(k1.Derecho);
-            return RotacionDerechoSimple(k1);
+            k1.Derecho = RotacionDerechoSimple(k1.Derecho);
+            return RotacionIzquierdoSimple(k1);
         }
 
     }
