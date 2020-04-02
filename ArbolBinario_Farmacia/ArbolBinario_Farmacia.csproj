@@ -175,6 +175,7 @@
     <Content Include="Views\Arbol\dummy.cshtml" />
     <Content Include="Views\Arbol\PaginaPrincipal.cshtml" />
     <Content Include="Views\Arbol\OverStock.cshtml" />
+    <Content Include="Views\Arbol\Reabastecer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

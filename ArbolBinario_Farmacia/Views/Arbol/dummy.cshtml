@@ -64,8 +64,15 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Total_a_Cancelar)
             </td>
-            
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Linea }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Linea }) |
+                @Html.ActionLink("Delete", "Reabastecer", new { id = item.Linea })
+            </td>
+
+
         </tr>
     }
 
 </table>
+@Html.ActionLink("Inicio", "PaginaPrincipal")

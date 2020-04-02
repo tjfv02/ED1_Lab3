@@ -13,6 +13,9 @@ namespace ArbolBinario_Farmacia.Controllers
     {
         //LIsta de pedidos 
         public static List<Pedido> Pedidos = new List<Pedido>(); // Todos los pedidos 
+        public static List<Nodo> ListaRecorridos = new List<Nodo>(); // Lista Recorridos
+
+        public static List<Nodo> Reabastecido = new List<Nodo>(); // Lista Reabastecer
 
         public static Nodo Raiz;
         public static Nodo nodo;
@@ -58,6 +61,54 @@ namespace ArbolBinario_Farmacia.Controllers
         //GET
         public ActionResult OverStock()
         {
+            return View();
+        }
+
+        //Llena una nueva lista con los datos del farmaco a eliminar, reabasteciendo
+        //GET
+        public ActionResult Reabastecer()
+        {
+            Pedido auxPedido;
+            Random rnd = new Random();
+            int Reabastecer = rnd.Next(1, 15);
+
+            auxPedido = Pedidos[Pedidos.Count-1];
+            foreach (Detalle auxDetalle in auxPedido.detalle)
+            {
+                Nodo auxFarmaco;
+                auxFarmaco = BuscarNodo(auxDetalle.Linea, Raiz);
+                auxFarmaco.Existencia = Reabastecer;
+
+
+                ////REABASTECER 
+                
+
+                //auxFarmaco.Existencia = Reabastecer;
+
+            }
+            // return View(Pedidos[Pedidos.Count - 1].detalle);
+
+            return View(Pedidos[Pedidos.Count]);
+        }
+        //Post
+        [HttpPost]
+        public ActionResult Reabastecer(FormCollection collection)
+        {
+            //Random rnd = new Random();
+            //int ReabastecerRandom = rnd.Next(1, 15);
+
+            //Nodo NuevoReabastecer = new Nodo()
+            //{
+            //    Linea = Convert.ToInt32(collection["Linea"]),
+            //    Nombre = collection["Nombre"],
+            //    Descripcion = collection["Descripcion"],
+            //    Casa_productora = collection["Casa_productora"],
+            //    Precio = Convert.ToDouble(collection["Precio"]),
+            //    Existencia = ReabastecerRandom
+                
+
+            //};
+            //Reabastecido.Add(NuevoReabastecer);
             return View();
         }
 
@@ -267,6 +318,28 @@ namespace ArbolBinario_Farmacia.Controllers
                 return View();
             }
         }
+        // GET: Arbol/Delete/5
+        public ActionResult Delete(int id)
+        {
+            return View();
+        }
+
+        // POST: Arbol/Delete/5
+        [HttpPost]
+        public ActionResult Delete(int id, FormCollection collection)
+        {
+            try
+            {
+               
+                
+
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
 
         // GET: Arbol/Edit/5
         public ActionResult Edit(int id)
@@ -289,30 +362,21 @@ namespace ArbolBinario_Farmacia.Controllers
                 return View();
             }
         }
-
-        // GET: Arbol/Delete/5
-        public ActionResult Delete(int id)
+        void QuitarProductos(int Linea, Nodo nodoQuitar)
         {
-            return View();
-        }
-
-        // POST: Arbol/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
+            Nodo NodoSinExistencia;
+            NodoSinExistencia=BuscarNodo(Linea, nodoQuitar);
+            if (NodoSinExistencia.Existencia==0)
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
+                //mandarlos a otra lista
+                Reabastecer();
+                ELiminar(NodoSinExistencia.Linea);
             }
         }
 
-        //----------------------------------Metodos------------------------------------------------
+        
+
+        //----------------------------------Metodos Arbol------------------------------------------------
         Nodo NuevoHijo(int linea,ref  Nodo hoja,ref Nodo padre, int Altura=0)
         {
 
@@ -388,6 +452,66 @@ namespace ArbolBinario_Farmacia.Controllers
                 auxInferior.Izquierdo = auxIzquierdo;
             }
         }
+        Nodo NecesitaReabastecimiento(int linea)
+        {
+
+            return Raiz;
+        }
+        //                                      Recorridos
+        //---------------------------------------------------------------------------------------------------
+        void listarPreOrden( )
+        {
+            PreOrden(Raiz, ListaRecorridos);
+        }
+        void listarInOrden()
+        {
+            InOrden(Raiz, ListaRecorridos);
+        }
+        void listarPostOrden()
+        {
+            PostOrden(Raiz, ListaRecorridos);
+        }
+
+
+        void PreOrden(Nodo NodoRecorrido, List<Nodo> Lista)
+        {
+            //PreOrden
+            Lista.Add(NodoRecorrido);
+            if (NodoRecorrido.Derecho!=null)
+            {
+                PreOrden(NodoRecorrido.Derecho, Lista);
+            }
+            if (NodoRecorrido.Izquierdo != null)
+            {
+                PreOrden(NodoRecorrido.Izquierdo, Lista);
+            }
+        }
+        void InOrden(Nodo NodoRecorrido, List<Nodo> Lista)
+        {
+            if (NodoRecorrido.Derecho != null)
+            {
+                InOrden(NodoRecorrido.Derecho, Lista);
+            }
+            Lista.Add(NodoRecorrido);
+            if (NodoRecorrido.Izquierdo != null)
+            {
+                InOrden(NodoRecorrido.Izquierdo, Lista);
+            }
+        }
+        void PostOrden(Nodo NodoRecorrido, List<Nodo> Lista)
+        {
+            if (NodoRecorrido.Derecho != null)
+            {
+                PostOrden(NodoRecorrido.Derecho, Lista);
+            }
+            if (NodoRecorrido.Izquierdo != null)
+            {
+                PostOrden(NodoRecorrido.Izquierdo, Lista);
+            }
+            Lista.Add(NodoRecorrido);
+        }
+
+
         //                                      Funciones AVL
         //---------------------------------------------------------------------------------------------------
         //Función para obtener que rama es mayor
